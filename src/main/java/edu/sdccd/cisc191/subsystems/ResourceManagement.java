@@ -13,9 +13,19 @@ public class ResourceManagement {
     public void gatherResources(Player player, String resourceName, PlayerInventory inventory) {
         lock.lock();
         try {
-           int collectedAmount = (int) (Math.random() * 10 + 5); // Random between 5-15
+            int collectedAmount = (int) (Math.random() * 10 + 5); // Random between 5-15
             inventory.addResource(resourceName, collectedAmount);
             System.out.println(player.getName() + " collcted " + collectedAmount + " " + resourceName + "!");
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void gatherResources(Player player2, Resource dilithium) {
+        lock.lock();
+        try {
+            int collectedAmount = (int) (Math.random() * 10 + 5);
+            System.out.println(player2.getName() + " collcted " + collectedAmount + " " + player2.getName() + "!");
         } finally {
             lock.unlock();
         }

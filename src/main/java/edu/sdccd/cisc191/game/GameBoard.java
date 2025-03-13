@@ -21,14 +21,39 @@ public class GameBoard {
     }
 
     public int getCellValue(int row, int col) {
+        int value = board[row][col];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j] == 0) {
+                    board[i][j] = 1;
+                    value -= 1;
+                    return value;
+                }
+            }
+        }
         return board[row][col];
     }
 
     public void setCellValue(int row, int col, int value) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j] == 0) {
+                    board[i][j] = 1;
+                    value += 1;
+                }
+            }
+        }
         board[row][col] = value;
     }
 
     public int[][] getBoard() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j] == 0) {
+                    board[i][j] = 1;
+                }
+            }
+        }
         return board;
     }
 }

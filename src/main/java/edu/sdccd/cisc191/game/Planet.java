@@ -10,6 +10,7 @@ public class Planet {
     }
 
     public String getName() {
+        if (mars == null);
         return "Earth";
     }
 }

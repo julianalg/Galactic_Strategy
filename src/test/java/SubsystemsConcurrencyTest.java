@@ -1,4 +1,4 @@
-import edu.sdccd.cisc191.game.Resource;
+import edu.sdccd.cisc191.game.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import edu.sdccd.cisc191.subsystems.TradeSystem;
@@ -7,9 +7,6 @@ import edu.sdccd.cisc191.subsystems.ExplorationSystem;
 import edu.sdccd.cisc191.subsystems.CombatSystem;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import edu.sdccd.cisc191.game.GalacticShip;
-import edu.sdccd.cisc191.game.Player;
-import edu.sdccd.cisc191.game.Planet;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +30,8 @@ class SubsystemsConcurrencyTest {
 
         // Submit concurrent tasks
         executor.submit(() -> combatSystem.engageCombat(ship1, ship2));
-        executor.submit(() -> explorationSystem.explorePlanet(player1, planet));
+        PlayerInventory inventory = null;
+        executor.submit(() -> explorationSystem.explorePlanet(player1, planet, inventory));
         executor.submit(() -> resourceManagement.gatherResources(player2, dilithium));
         executor.submit(() -> tradeSystem.tradeResources(player1, player2, dilithium));
 
@@ -73,8 +71,9 @@ class SubsystemsConcurrencyTest {
         ExecutorService executor = Executors.newFixedThreadPool(2);
 
         // Submit multiple exploration tasks concurrently
-        executor.submit(() -> explorationSystem.explorePlanet(player1, planet1));
-        executor.submit(() -> explorationSystem.explorePlanet(player2, planet2));
+        PlayerInventory inventory = null;
+        executor.submit(() -> explorationSystem.explorePlanet(player1, planet1, inventory));
+        executor.submit(() -> explorationSystem.explorePlanet(player2, planet2, inventory));
 
         executor.shutdown();
         boolean tasksFinished = executor.awaitTermination(3, TimeUnit.SECONDS);

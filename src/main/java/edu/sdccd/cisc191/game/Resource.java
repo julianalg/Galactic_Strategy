@@ -12,7 +12,7 @@ public class Resource implements Serializable {
     private int amount;
     private final Lock lock = new ReentrantLock();
 
-    public Resource(String name, int amount) {
+    public Resource(String name) {
         this.name = name;
         this.amount = amount;
     }

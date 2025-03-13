@@ -37,6 +37,7 @@ public class Player {
      */
     public void addShip(GalacticShip ship) {
         fleet.add(ship);
+        fleet.add(ship);
     }
 
     /**

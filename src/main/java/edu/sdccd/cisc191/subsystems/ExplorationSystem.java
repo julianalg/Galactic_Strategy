@@ -3,6 +3,8 @@ import edu.sdccd.cisc191.game.GalacticShip;
 
 import edu.sdccd.cisc191.game.Planet;
 import edu.sdccd.cisc191.game.Player;
+import edu.sdccd.cisc191.game.PlayerInventory;
+
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -27,7 +29,7 @@ public class ExplorationSystem {
      * @param player The player exploring
      * @param planet The planet is being explored.
      */
-    public void explorePlanet(Player player, Planet planet) {
+    public void explorePlanet(Player player, Planet planet, PlayerInventory inventory) {
         lock.lock();
         try {
             System.out.println(player.getName() + " is exploring " + planet.getName());

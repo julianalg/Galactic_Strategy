@@ -23,6 +23,7 @@ public class GalacticShip {
     }
 
     public GalacticShip(String enterprise) {
+        this.health = 0;
         this.name = enterprise;
     }
 

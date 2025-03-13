@@ -10,18 +10,18 @@ public class PlayerInventory implements Serializable {
 
     public PlayerInventory() {
         resources = new HashMap<>();
-        resources.put("Fuel", new Resource("Dilithium", 10));
-        resources.put("Minerals", new Resource("Fuel", 50));
-        resources.put("Minerals", new Resource("Minerals", 30));
-        resources.put("Energy", new Resource("Energy", 20));
-        resources.put("Credits", new Resource("Credits", 100));
+        resources.put("Fuel", new Resource("Dilithium"));
+        resources.put("Minerals", new Resource("Fuel"));
+        resources.put("Minerals", new Resource("Minerals"));
+        resources.put("Energy", new Resource("Energy"));
+        resources.put("Credits", new Resource("Credits"));
     }
 
     public void addResource(String type, int amount) {
         if (resources.containsKey(type)) {
             resources.get(type).addAmount(amount);
         } else {
-            resources.put(type, new Resource(type, amount));
+            resources.put(type, new Resource(type));
         }
     }
 
@@ -30,7 +30,10 @@ public class PlayerInventory implements Serializable {
     }
 
     public int getResourceAmount(String type) {
-        return resources.getOrDefault(type, new Resource(type, 0)).getAmount();
+        if (resources.containsKey(type)) {
+            return resources.get(type).getAmount();
+        }
+        return resources.getOrDefault(type, new Resource(type)).getAmount();
     }
 
     public String displayResources() {
