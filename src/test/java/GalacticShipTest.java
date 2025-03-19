@@ -1,7 +1,9 @@
 import edu.sdccd.cisc191.game.GalacticShip;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GalacticShipTest {
 
@@ -41,5 +43,55 @@ public class GalacticShipTest {
     public void testGetName() {
         GalacticShip ship = new GalacticShip("Test Ship", 100, 10);
         assertEquals("Test Ship", ship.getName(), "Ship's name should be 'Test Ship'");
+    }
+
+    @Test
+    void testCombatAbility() {
+        // Initial state verification
+
+        GalacticShip ship = new GalacticShip("USS Enterprise", 100, 20);
+        assertTrue(ship.getCombatAbilities().isEmpty(),
+                "New ship should have no abilities");
+
+        // Test adding first ability
+        ship.addCombatAbility(GalacticShip.CombatAbility.LASER_CANNON);
+        assertTrue(ship.hasCombatAbility(GalacticShip.CombatAbility.LASER_CANNON),
+                "Ship should have laser cannon after adding");
+        assertEquals(1, ship.getCombatAbilities().size(),
+                "Abilities list size should match added abilities");
+
+        // Test adding second ability
+        ship.addCombatAbility(GalacticShip.CombatAbility.SHIELD_GENERATOR);
+        assertTrue(ship.hasCombatAbility(GalacticShip.CombatAbility.SHIELD_GENERATOR),
+                "Ship should have shield generator after adding");
+        assertEquals(2, ship.getCombatAbilities().size(),
+                "Abilities list should contain both added abilities");
+
+        // Test duplicate prevention
+        ship.addCombatAbility(GalacticShip.CombatAbility.LASER_CANNON);
+        assertEquals(2, ship.getCombatAbilities().size(),
+                "Should prevent duplicate ability entries");
+
+        // Test ability list contents
+        List<GalacticShip.CombatAbility> expectedAbilities = List.of(
+                GalacticShip.CombatAbility.LASER_CANNON,
+                GalacticShip.CombatAbility.SHIELD_GENERATOR
+        );
+        assertTrue(ship.getCombatAbilities().containsAll(expectedAbilities),
+                "Should contain all added abilities");
+
+        // Test removing ability
+        ship.removeCombatAbility(GalacticShip.CombatAbility.LASER_CANNON);
+        assertFalse(ship.hasCombatAbility(GalacticShip.CombatAbility.LASER_CANNON),
+                "Ship should no longer have laser cannon after removal");
+        assertEquals(1, ship.getCombatAbilities().size(),
+                "Abilities list should decrease after removal");
+        assertTrue(ship.hasCombatAbility(GalacticShip.CombatAbility.SHIELD_GENERATOR),
+                "Shield generator should remain after laser removal");
+
+        // Test removing non-existent ability (edge case)
+        ship.removeCombatAbility(GalacticShip.CombatAbility.CLOAKING_DEVICE);
+        assertEquals(1, ship.getCombatAbilities().size(),
+                "Removing non-existent ability should not affect list");
     }
 }
