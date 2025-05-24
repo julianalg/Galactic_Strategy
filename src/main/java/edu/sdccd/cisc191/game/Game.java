@@ -4,12 +4,14 @@ import edu.sdccd.cisc191.subsystems.CombatSystem;
 import edu.sdccd.cisc191.subsystems.ExplorationSystem;
 import edu.sdccd.cisc191.subsystems.ResourceManagement;
 import edu.sdccd.cisc191.game.PlayerInventory;
+import edu.sdccd.cisc191.utilities.GameUI;
 
 import javafx.animation.AnimationTimer; // 1 Game loop that calls handle() method
 import javafx.application.Application;  // 2 JavaFX application base class
 import javafx.scene.Scene;              // 3 Container for all content in a scene graph
 import javafx.scene.control.*;      // 4 IU control text display
 import javafx.scene.input.KeyCode;      // 5 Provides key codes to handle keyboard input
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;              // 7 Top-level window
 
 import javafx.scene.control.ListView;                   // 8
@@ -35,6 +37,8 @@ public class Game extends Application {
     private TextArea gameLog;
     private ComboBox<String> planetSelector;// Field to store the current state of the game
     private Label resourceLabel;
+    private GameUI gameUI;
+    private CombatSystem combatSystem;
 
     private GameState gameState;
 
@@ -81,7 +85,7 @@ public class Game extends Application {
         // Exploration UI
         Button exploreBtn = new Button("Explore Planet");
         planetSelector = new ComboBox<>();
-        planetSelector.getItems().addAll("Mars", "Jupiter", "Neptune", "Alpha Centauri", "Andromeda");
+        planetSelector.getItems().addAll("Mars", "Earth", "Jupiter", "Neptune", "Alpha Centauri", "Andromeda");
         planetSelector.setValue("Mars"); // Default selection
 
         // Assign button actions
@@ -157,6 +161,38 @@ public class Game extends Application {
         }
     }
 
+    private void runCombatExample() {
+        GalacticShip playerShip = new GalacticShip("Enterprise", 100, 20);
+        GalacticShip enemyShip = new GalacticShip("Klingon Raider", 80, 18);
+        CombatSystem combatSystem = new CombatSystem();
+
+        // Engage combat (logs will appear in the console as per CombatSystem)
+        combatSystem.engageCombat(playerShip, enemyShip);
+
+        // Optionally, display result in the UI if gameUI is available
+        if (gameUI != null) {
+            if (playerShip.isDestroyed()) {
+
+                gameUI.appendMessage(playerShip.getName() + "was destroyed! GAME OVER!");
+            } else if (enemyShip.isDestroyed()) {
+                gameUI.appendMessage(playerShip.getName() + "was destroyed! Victory!");
+            }
+        }
+    }
+
+    private void setupUI(Stage stage) {
+        gameUI = new GameUI();
+        StackPane root = new StackPane();
+        Scene scene = new Scene(root, 500, 600);
+        stage.setScene(scene);
+        stage.setTitle("Galactic Strategy");
+        stage.show();
+
+        gameUI.appendMessage("Welcome to Galactic Strategy!");
+    }
+
+
+
     /*
      * Builds a new shp asynchronously
      * @param shipType The Type of ship to build
@@ -215,6 +251,7 @@ public class Game extends Application {
         updateFleetDisplay();
         resourceLabel.setText("Resources:\n" + inventory.displayResources());
     }
+
 
     // Stops the shipyard's background task before closing the game
     @Override
