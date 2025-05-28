@@ -11,6 +11,7 @@ import javafx.application.Application;  // 2 JavaFX application base class
 import javafx.scene.Scene;              // 3 Container for all content in a scene graph
 import javafx.scene.control.*;      // 4 IU control text display
 import javafx.scene.input.KeyCode;      // 5 Provides key codes to handle keyboard input
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;              // 7 Top-level window
 
@@ -31,6 +32,9 @@ public class Game extends Application {
     private ResourceManagement resourceManagement;
     private Player player;
     private PlayerInventory inventory;
+    private GameBoard gameBoard;
+    private PlayerMovementManager movementManager;
+
 
     private ListView<String> fleetListView;     // IUO List for displaying player's fleet
     private Label statusLabel;                  // Status label
@@ -39,6 +43,7 @@ public class Game extends Application {
     private Label resourceLabel;
     private GameUI gameUI;
     private CombatSystem combatSystem;
+    private Label locationLabel;
 
     private GameState gameState;
 
@@ -58,6 +63,11 @@ public class Game extends Application {
         resourceManagement = new ResourceManagement();
         inventory = new PlayerInventory();
         player = new Player ("Captain");
+        player.addShip(new GalacticShip("Starter Ship", 100, 20)); // Start with a ship
+        locationLabel = new Label("Location: Earth"); // Default location
+        gameBoard = new GameBoard();
+        gameBoard.initializeBoard();
+        movementManager = new PlayerMovementManager(player, gameBoard, inventory);
 
         gameState = GameState.MENU;
 
@@ -95,13 +105,23 @@ public class Game extends Application {
         upgradeShipBtn.setOnAction(e -> upgradeSelectedShip());
         exploreBtn.setOnAction(e -> exploreSelectedPlanet());
 
+        Button upBtn = new Button("↑");
+        Button downBtn = new Button("↓");
+        Button leftBtn = new Button("←");
+        Button rightBtn = new Button("→");
+
+        HBox moveRow1 = new HBox(10, upBtn);
+        HBox moveRow2 = new HBox(10, leftBtn, downBtn, rightBtn);
+        VBox movementControls = new VBox(5, moveRow1, moveRow2);
+
+
         // Layout for the UI
         VBox layout = new VBox(10);
         layout.getChildren().addAll(
-                statusLabel, fleetListView, buildFighterBtn, buildCruiserBtn,
+                statusLabel, locationLabel, fleetListView, buildFighterBtn, buildCruiserBtn,
                 buildBattleshipBtn, upgradeShipBtn, gatherDilithiumBtn,
-                planetSelector, exploreBtn, gameLog, resourceLabel
-        );
+                planetSelector, exploreBtn, movementControls, gameLog, resourceLabel
+        );;
 
         Scene scene = new Scene(layout, 500, 600);
 
@@ -111,6 +131,11 @@ public class Game extends Application {
         primaryStage.setTitle("Galactic Strategy"); // Set Title window (Primary stage)
         primaryStage.setScene(scene);               // Attach the scene to the primary stage
         primaryStage.show();                        // Displays primary stage (Opens window)
+
+        upBtn.setOnAction(e -> handleMove("up"));
+        downBtn.setOnAction(e -> handleMove("down"));
+        leftBtn.setOnAction(e -> handleMove("left"));
+        rightBtn.setOnAction(e -> handleMove("right"));
 
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {
@@ -161,6 +186,21 @@ public class Game extends Application {
         }
     }
 
+    private void handleMove(String direction) {
+        boolean moved = movementManager.move(direction);
+        if (moved) {
+            int r = movementManager.getRow();
+            int c = movementManager.getCol();
+            String planet = getPlanetNameById(gameBoard.getPlanetId(r, c));
+            locationLabel.setText("Location: (" + r + "," + c + ")");
+            statusLabel.setText(planet.equals("Unknown") ? "Empty space" : "Arrived at " + planet);
+            resourceLabel.setText("Resource:\n" + inventory.displayResources());
+            gameLog.appendText("Moved " + direction + " to (" + r + "," + c + ")\n");
+        } else {
+            statusLabel.setText("Move failed (no fuel or out of bounds)");
+        }
+    }
+
     private void runCombatExample() {
         GalacticShip playerShip = new GalacticShip("Enterprise", 100, 20);
         GalacticShip enemyShip = new GalacticShip("Klingon Raider", 80, 18);
@@ -198,7 +238,7 @@ public class Game extends Application {
      * @param shipType The Type of ship to build
      */
     private void buildShip(String shipType, int mineralsCost, int energyCost) {
-        if (inventory == null || !(inventory.useResource("Minerals", mineralsCost) && !inventory.useResource("Energy", energyCost))) {
+        if (inventory == null || !inventory.useResource("Minerals", mineralsCost) || !inventory.useResource("Energy", energyCost)) {
             statusLabel.setText("Not enough resources to build " + shipType);
             return;
         }
@@ -241,17 +281,34 @@ public class Game extends Application {
 
     // Handles exploring a selected planet
     private void exploreSelectedPlanet() {
-        String planetName = planetSelector.getValue();
-        Planet planet = new Planet(planetName); // Create a new Planet object
+        int r = movementManager.getRow();
+        int c = movementManager.getCol();
+        int planetId = gameBoard.getPlanetId(r, c);
 
-        gameLog.appendText("Exploring " + planetName + "...\n");
-        explorationSystem.explorePlanet(player, planet, inventory);
+        if (planetId == 0) {
+            statusLabel.setText("There is no planet here to explore");
+            return;
+        }
 
-        // Log fleet updates and resources
+        String planetName = getPlanetNameById(planetId);
+        Planet currentPlanet = new Planet(planetName);
+        explorationSystem.explorePlanet(player, currentPlanet, inventory);
+
+        statusLabel.setText("explored " + planetName + "!");
+        gameLog.appendText("Explored " + planetName + " at (" + r + "," + c + ")\n");
         updateFleetDisplay();
         resourceLabel.setText("Resources:\n" + inventory.displayResources());
     }
 
+    private String getPlanetNameById(int id) {
+        return switch (id) {
+            case 1 -> "Earth";
+            case 2 -> "Mars";
+            case 3 -> "Jupiter";
+            case 4 -> "Saturn";
+            default -> "Unknown";
+        };
+    }
 
     // Stops the shipyard's background task before closing the game
     @Override

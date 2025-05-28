@@ -22,6 +22,12 @@ public class GameBoard {
                 resourceCosts[i][j] = 1; // Default traversal cost
             }
         }
+
+        placePlanet(0, 0, 1); // Earth
+
+        placePlanet(2, 2, 2); // Mars
+
+        placePlanet(4, 4, 3); // Jupiter
     }
 
     /**
@@ -57,38 +63,14 @@ public class GameBoard {
         return planets[row][col];
     }
 
-    /**
-     * Gets the resource cost to traverse a specific cell.
-     *
-     * @param row The row of the cell.
-     * @param col The column of the cell.
-     * @return The resource cost to traverse this cell.
-     */
     public int getResourceCost(int row, int col) {
         return resourceCosts[row][col];
     }
 
-    /**
-     * Gets the entire planets array.
-     *
-     * @return A 2D array representing all planets on the board.
-     */
-    public int[][] getPlanets() {
-        return planets;
+    public boolean inBounds(int row, int col) {
+        return row >= 0 && row < rows && col >= 0 && col < cols;
     }
 
-    /**
-     * Gets the entire resource costs array.
-     *
-     * @return A 2D array representing all resource costs on the board.
-     */
-    public int[][] getResourceCosts() {
-        return resourceCosts;
-    }
-
-    /**
-     * Prints a visual representation of the game board with planets and costs.
-     */
     public void displayBoard() {
         System.out.println("Planets:");
         for (int i = 0; i < rows; i++) {
@@ -106,43 +88,11 @@ public class GameBoard {
         }
     }
 
-    public int getCellValue(int i, int j) {
-        // Ensure i and j are within bounds
-        if (i < 0 || i >= rows || j < 0 || j >= cols) {
-            throw new IllegalArgumentException("Invalid cell coordinates");
-        }
-
-        // Pack the planet ID and resource cost into a single integer
-        // Use the lower 16 bits for the planet ID and the upper 16 bits for the resource cost
-        return (resourceCosts[i][j] << 16) | (planets[i][j] & 0xFFFF);
+    public int getRows() {
+        return rows;
     }
 
-    public int setCellValue(int i, int i1, int i2) {
-        // Ensure i and j are within bounds
-        i1 = getCellValue(i, i1);
-        i2 = getCellValue(i, i2);
-        int j = 0;
-        if (i < 0 || i >= rows || j < 0 || j >= cols) {
-            throw new IllegalArgumentException("Invalid cell coordinates");
-        }
-        if (i1 < 0 || i1 >= rows || i2 < 0 || i2 >= cols) {
-            throw new IllegalArgumentException("Invalid cell coordinates");
-        }
-        if (i2 < 0 || i2 >= rows || i1 >= cols) {
-            throw new IllegalArgumentException("Invalid cell coordinates");
-        }
-
-        // Pack the planet ID and resource cost into a single integer
-        // Use the lower 16 bits for the planet ID and the upper 16 bits for the resource cost
-        return (resourceCosts[i][j] << 16) | (planets[i][j] & 0xFFFF);
-    }
-
-    public int[][] getBoard() {
-        int[][] board = new int[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                board[i][j] = planets[i][j];
-            }
-        } return board;
+    public int getCols() {
+        return cols;
     }
 }

@@ -4,20 +4,20 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-    /*
-     * Shipyard class for managing spaceship constructions and upgrades
-     * Uses I/O streams for saving.loading shipyard state
-     * Uses ExecutorService for concurrent ship building
-     */
+/*
+ * Shipyard class for managing spaceship constructions and upgrades
+ * Uses I/O streams for saving.loading shipyard state
+ * Uses ExecutorService for concurrent ship building
+ */
 
-     /*
-      * Features added:
-      * Ship Construction: Player can build ships asynchronously (multithreading)
-      * Ship Upgrades: Upgrades ships, increasing their stats
-      * Save and Load: Fleet persists between game sessions using file I/O (OOS)
-      * Concurrency Handling: Uses ExecutorService for shipbuilding
-      * Interactive Testing: main method allows quick testing of shipyard features
-      */
+/*
+ * Features added:
+ * Ship Construction: Player can build ships asynchronously (multithreading)
+ * Ship Upgrades: Upgrades ships, increasing their stats
+ * Save and Load: Fleet persists between game sessions using file I/O (OOS)
+ * Concurrency Handling: Uses ExecutorService for shipbuilding
+ * Interactive Testing: main method allows quick testing of shipyard features
+ */
 
 public class Shipyard {
     private final Map<String, GalacticShip> availableShips;
@@ -33,7 +33,7 @@ public class Shipyard {
 
         initializeShipyard();
         loadShipyardState();
-        }
+    }
 
     // Initializes default ship types available in the shipyard
     private void initializeShipyard() {
