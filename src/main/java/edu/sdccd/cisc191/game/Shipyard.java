@@ -110,6 +110,7 @@ public class Shipyard {
         }
     }
 
+    // TODO: add a method to be used in saveShipyardState() and loadShipyardState() to check first if the file exists, and if it doesn't to create a file ships.json in the resources folder
     /*
      * Retrieves the player's fleet
      * @return List of GalacticShips in the player's fleet
@@ -124,6 +125,7 @@ public class Shipyard {
             out.writeObject(playerFleet);
             System.out.println("Shipyard state saved.");
         } catch (IOException e) {
+            // TODO: if file doesn't exist, create it.
             System.err.println("Error saving shipyard state: " + e.getMessage());
         }
     }

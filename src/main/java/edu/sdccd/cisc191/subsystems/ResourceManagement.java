@@ -10,12 +10,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ResourceManagement {
     private final Lock lock = new ReentrantLock();
 
+    // TODO: clean up multiple different gatherResources methods
     public void gatherResources(Player player, String resourceName, PlayerInventory inventory) {
         lock.lock();
         try {
             int collectedAmount = (int) (Math.random() * 10 + 5); // Random between 5-15
             inventory.addResource(resourceName, collectedAmount);
-            System.out.println(player.getName() + " collcted " + collectedAmount + " " + resourceName + "!");
+            // TODO: replace System.out.println with logging this information to the in-game UI log
+            System.out.println(player.getName() + " collected " + collectedAmount + " " + resourceName + "!");
         } finally {
             lock.unlock();
         }
@@ -25,7 +27,8 @@ public class ResourceManagement {
         lock.lock();
         try {
             int collectedAmount = (int) (Math.random() * 10 + 5);
-            System.out.println(player2.getName() + " collcted " + collectedAmount + " " + player2.getName() + "!");
+            // TODO: replace System.out.println with logging this information to the in-game UI log
+            System.out.println(player2.getName() + " collected " + collectedAmount + " " + player2.getName() + "!");
         } finally {
             lock.unlock();
         }

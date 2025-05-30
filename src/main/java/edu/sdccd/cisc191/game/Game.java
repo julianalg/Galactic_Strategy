@@ -3,6 +3,7 @@ package edu.sdccd.cisc191.game;
 import edu.sdccd.cisc191.subsystems.CombatSystem;
 import edu.sdccd.cisc191.subsystems.ExplorationSystem;
 import edu.sdccd.cisc191.subsystems.ResourceManagement;
+// TODO: remove unused import
 import edu.sdccd.cisc191.game.PlayerInventory;
 import edu.sdccd.cisc191.utilities.GameUI;
 
@@ -27,6 +28,8 @@ import java.util.concurrent.TimeUnit;                   // 13
 
 // Main Game Class (Integrates JavaFX, Shipyard System, and Exploration System)
 public class Game extends Application {
+    // TODO: break Game into different classes for UI, game logic, and subsystems
+    // TODO: create separate packages for game resources, like Planet, Player, PlayerInventory, etc.
     private Shipyard shipyard;
     private ExplorationSystem explorationSystem;
     private ResourceManagement resourceManagement;
@@ -56,7 +59,8 @@ public class Game extends Application {
     }
 
     @Override
-    public void start (Stage primaryStage) {    // Main window
+    public void start (Stage primaryStage) {// Main window
+        // TODO: split this portion to load game into a separate method
         // Initialize game components
         shipyard = new Shipyard();
         explorationSystem = new ExplorationSystem();
@@ -72,17 +76,21 @@ public class Game extends Application {
         gameState = GameState.MENU;
 
         // Create UI elements
+        // TODO: separate these methods to load specific javafx components into separate components
         statusLabel = new Label("Welcome to Galactic Strategy! (Press ENTER to start)");
         fleetListView = new ListView<>();
         updateFleetDisplay();   // Load fleet data
 
         gameLog = new TextArea();
         gameLog.setEditable(false);
+        // TODO: make this view larger in order to display more player information
         gameLog.setPrefHeight(150);
 
         resourceLabel = new Label("Resources:\n" + inventory.displayResources());
 
         // Shipyard UI Buttons
+        // TODO: utilize JavaFX CSS styling to add more detail and differentiation between these buttons
+        // TODO: display all buttons if the GameState is menu, paused, or gameover
         Button buildFighterBtn = new Button("Build Fighter (10 Minerals, 5 Energy)");
         Button buildCruiserBtn = new Button("Build Cruiser (15 Minerals, 7 Energy)");
         Button buildBattleshipBtn = new Button("Build Battleship (20 Minerals, 10 Energy)");
@@ -114,6 +122,7 @@ public class Game extends Application {
         HBox moveRow2 = new HBox(10, leftBtn, downBtn, rightBtn);
         VBox movementControls = new VBox(5, moveRow1, moveRow2);
 
+        // TODO: add UI component to display amount of minerals, energy of user within the javafx UI
 
         // Layout for the UI
         VBox layout = new VBox(10);
@@ -121,12 +130,13 @@ public class Game extends Application {
                 statusLabel, locationLabel, fleetListView, buildFighterBtn, buildCruiserBtn,
                 buildBattleshipBtn, upgradeShipBtn, gatherDilithiumBtn,
                 planetSelector, exploreBtn, movementControls, gameLog, resourceLabel
-        );;
+        );
 
         Scene scene = new Scene(layout, 500, 600);
 
         // Keyboard controls for game state changes
         scene.setOnKeyPressed(event -> handleKeyPress(event.getCode()));
+
 
         primaryStage.setTitle("Galactic Strategy"); // Set Title window (Primary stage)
         primaryStage.setScene(scene);               // Attach the scene to the primary stage
@@ -148,16 +158,17 @@ public class Game extends Application {
     }
 
     // Handles keyboard input for game state management
+    // TODO: remap buttons, ENTER and ESCAPE for start and ending respectively don't appear to work, at least on Mac
     private void handleKeyPress(KeyCode key) {
         switch (key) {
-            case ENTER:
+            case A:
                 if (gameState == GameState.MENU) gameState = GameState.PLAYING;
                 break;
             case P:
                 if (gameState == GameState.PLAYING) gameState = GameState.PAUSED;
                 else if (gameState == GameState.PAUSED) gameState = GameState.PLAYING;
                 break;
-            case ESCAPE:
+            case E:
                 gameState = GameState.GAME_OVER;
                 break;
         }
@@ -195,12 +206,13 @@ public class Game extends Application {
             locationLabel.setText("Location: (" + r + "," + c + ")");
             statusLabel.setText(planet.equals("Unknown") ? "Empty space" : "Arrived at " + planet);
             resourceLabel.setText("Resource:\n" + inventory.displayResources());
-            gameLog.appendText("Moved " + direction + " to (" + r + "," + c + ")\n");
+            gameUI.appendMessage("Moved " + direction + " to (" + r + "," + c + ")\n");
         } else {
             statusLabel.setText("Move failed (no fuel or out of bounds)");
         }
     }
 
+    // TODO: delete this method to test combat that is never used
     private void runCombatExample() {
         GalacticShip playerShip = new GalacticShip("Enterprise", 100, 20);
         GalacticShip enemyShip = new GalacticShip("Klingon Raider", 80, 18);
@@ -212,7 +224,6 @@ public class Game extends Application {
         // Optionally, display result in the UI if gameUI is available
         if (gameUI != null) {
             if (playerShip.isDestroyed()) {
-
                 gameUI.appendMessage(playerShip.getName() + "was destroyed! GAME OVER!");
             } else if (enemyShip.isDestroyed()) {
                 gameUI.appendMessage(playerShip.getName() + "was destroyed! Victory!");
@@ -220,6 +231,7 @@ public class Game extends Application {
         }
     }
 
+    // TODO: delete this method to load UI that was never used
     private void setupUI(Stage stage) {
         gameUI = new GameUI();
         StackPane root = new StackPane();
@@ -238,6 +250,7 @@ public class Game extends Application {
      * @param shipType The Type of ship to build
      */
     private void buildShip(String shipType, int mineralsCost, int energyCost) {
+        System.out.println(mineralsCost + " " + energyCost + " " + shipType);
         if (inventory == null || !inventory.useResource("Minerals", mineralsCost) || !inventory.useResource("Energy", energyCost)) {
             statusLabel.setText("Not enough resources to build " + shipType);
             return;

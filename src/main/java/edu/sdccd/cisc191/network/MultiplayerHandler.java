@@ -14,6 +14,7 @@ import java.util.Map;
  * - Provides utility methods for managing game state
  */
 
+// TODO: delete or implement unused Server code
 public class MultiplayerHandler {
 
     public final Map<String, PlayerData> players; // Map to store player data by unique ID

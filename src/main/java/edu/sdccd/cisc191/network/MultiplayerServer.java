@@ -17,6 +17,7 @@ public class MultiplayerServer {
     private static final int PORT = 5000; // Port for communication
     private static Set<PrintWriter> clientWriters = new HashSet<>();
 
+    // TODO: replace System.out.println calls with loggers
     public static void main(String[] args) {
         System.out.println("Multiplayer Server Started...");
         try (ServerSocket serverSocket = new ServerSocket (PORT)) {

@@ -1,6 +1,7 @@
 package edu.sdccd.cisc191.game;
 
 public class GameBoard {
+    // TODO: planets and resourceCosts could be final, since they are never changed after initialization
     private int[][] planets; // Represents planets in the galaxy (0 = empty, other values = planet IDs)
     private int[][] resourceCosts; // Represents resource cost to traverse each cell
     private final int rows = 5;

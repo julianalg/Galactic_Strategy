@@ -14,6 +14,7 @@ public class Resource implements Serializable {
 
     public Resource(String name) {
         this.name = name;
+        // TODO: no parameter in the constructor for amount, either remove it from the constructor or set it to 0 by default
         this.amount = amount;
     }
 

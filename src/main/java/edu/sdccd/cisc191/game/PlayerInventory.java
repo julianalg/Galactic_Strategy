@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Manages player's inventory of resources
+// TODO: implement PlayerInventory to a database
 public class PlayerInventory implements Serializable {
     private Map<String, Resource> resources;
 
     public PlayerInventory() {
         resources = new HashMap<>();
         resources.put("Fuel", new Resource("Dilithium"));
+        // TODO: remove duplicate "Minerals" entry, or rename the first minerals to be Fuel
         resources.put("Minerals", new Resource("Fuel"));
         resources.put("Minerals", new Resource("Minerals"));
         resources.put("Energy", new Resource("Energy"));

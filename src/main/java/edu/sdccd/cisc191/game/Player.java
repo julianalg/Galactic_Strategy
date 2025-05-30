@@ -9,6 +9,7 @@ import java.util.List;
  * Each player has a name and a fleet of GalacticShips.
  */
 public class Player {
+    // TODO: set the name and fleet fields to final, since they are never changed after initialization
     private String name;
     private List<GalacticShip> fleet;
 
@@ -35,6 +36,7 @@ public class Player {
      *
      * @param ship The GalacticShip to add.
      */
+    // TODO: remove the duplicate ship addition to the ArrayList
     public void addShip(GalacticShip ship) {
         fleet.add(ship);
         fleet.add(ship);
