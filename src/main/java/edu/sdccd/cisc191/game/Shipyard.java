@@ -28,7 +28,7 @@ public class Shipyard {
     // Constructs a Shipyard with predefined ship options
     public Shipyard() {
         this.availableShips = new HashMap<>();
-        this.playerFleet = new ArrayList<>();
+        this.playerFleet = new ArrayList<>(); // TODO: integrate with the Player by allowing a Shipyard to take in a Player object, and initializing playerFleet to the the player's fleet object
         this.shipBuilderPool = Executors.newFixedThreadPool(2); // Allows 2 ships to be built at a time
 
         initializeShipyard();

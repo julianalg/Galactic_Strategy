@@ -9,6 +9,7 @@ public class Planet {
     public final String neptune;
 
     // Existing 5-argument constructor
+    // TODO: remove extra unused constructor
     public Planet(String mars, String jupiter, String earth, String andromeda, String neptune) {
         this.mars = mars;
         this.earth = earth;
@@ -26,6 +27,8 @@ public class Planet {
         this.neptune = "Neptune".equalsIgnoreCase(planetName) ? planetName : null;
     }
 
+    // TODO: implement or delete unused methods
+    // TODO: for these methods, if the planet is not found, return a default value of null. 
     public String getEarth() {
         return earth != null ? earth : "Earth";
     }

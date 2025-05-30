@@ -64,6 +64,7 @@ public class GameBoard {
         return planets[row][col];
     }
 
+    // TODO: write javadocs for the remaining methods within the class
     public int getResourceCost(int row, int col) {
         return resourceCosts[row][col];
     }
@@ -72,6 +73,7 @@ public class GameBoard {
         return row >= 0 && row < rows && col >= 0 && col < cols;
     }
 
+    // TODO: delete or implement unused displayBoard method
     public void displayBoard() {
         System.out.println("Planets:");
         for (int i = 0; i < rows; i++) {

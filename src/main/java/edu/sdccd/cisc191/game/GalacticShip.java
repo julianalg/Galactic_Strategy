@@ -8,9 +8,11 @@ import java.util.List;
  * Each ship has a name, health, attack power, and combat abilities, and can engage in combat.
  */
 public class GalacticShip {
+    // TODO: make field final, since they are never changed after initialization
     private String name;
     private int health;
     private int attackPower;
+    // TODO: make field final, since they are never changed after initialization
     private List<CombatAbility> combatAbilities;
 
     /**

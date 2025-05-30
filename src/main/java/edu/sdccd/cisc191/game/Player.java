@@ -11,6 +11,7 @@ import java.util.List;
 public class Player {
     // TODO: set the name and fleet fields to final, since they are never changed after initialization
     private String name;
+    // TODO: make fleet a LinkedList (video explanation says that this should be a LinkedList but is type List)
     private List<GalacticShip> fleet;
 
     /**
@@ -23,6 +24,7 @@ public class Player {
         this.fleet = new ArrayList<>();
     }
 
+    // TODO: use a library like lombok to auto generate getters and setters
     public String getName() {
         return name;
     }
@@ -54,4 +56,6 @@ public class Player {
         }
         return totalHealth;
     }
+
+    // TODO: implement a method to use a Linear Search to find ships within the fleet List
 }

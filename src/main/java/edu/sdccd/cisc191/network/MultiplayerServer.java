@@ -15,6 +15,7 @@ import java.util.Set;
 
 public class MultiplayerServer {
     private static final int PORT = 5000; // Port for communication
+    // TODO: clientWriters never changed, so it could be final
     private static Set<PrintWriter> clientWriters = new HashSet<>();
 
     // TODO: replace System.out.println calls with loggers
